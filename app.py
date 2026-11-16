@@ -294,6 +294,7 @@ def register():
     ]
 
     new_columns = {
+        "username": "TEXT",
         "roll_no": "TEXT",
         "gender": "TEXT",
         "branch": "TEXT",
@@ -305,6 +306,10 @@ def register():
             db.execute(
                 f"ALTER TABLE users ADD COLUMN {column} {data_type}"
             )
+    db.execute("""
+        CREATE UNIQUE INDEX IF NOT EXISTS
+        idx_users_username ON users(username)
+    """)
 
     db.commit()
 
