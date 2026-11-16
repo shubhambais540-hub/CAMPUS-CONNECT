@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Profile | CampusConnect</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Student Profile</h1>
+
+        <div class="profile-card">
+
+            <div class="profile-avatar">
+
+                {% if user["profile_photo"] %}
+                    <img src="{{ url_for('static', filename='uploads/profile_photos/' + user['profile_photo']) }}"
+                        alt="Profile Photo"
+                        class="profile-photo"
+                        onclick="openPhoto(this.src)"
+                        style="cursor: zoom-in; pointer-events: auto; position: relative; z-index: 10;">
+                {% else %}
+                    👨‍🎓
+                {% endif %}
+
+            </div>
+
+            <h2>{{ user["name"] }}</h2>
+
+            <p><strong>Student ID:</strong> {{ user["id"] }}</p>
+            <p><strong>Full Name:</strong> {{ user["name"] }}</p>
+            <p><strong>Username:</strong> {{ user["email"] }}</p>
+
+            <p><strong>Roll Number:</strong>
+                {{ user["roll_no"] or "Not added" }}
+            </p>
+
+            <p><strong>Gender:</strong>
+                {{ user["gender"] or "Not added" }}
+            </p>
+
+            <p><strong>Branch:</strong>
+                {{ user["branch"] or "Not added" }}
+            </p>
+
+            <p><strong>Course:</strong>
+                {{ user["course"] or "Not added" }}
+            </p>
+
+            <hr>
+
+            <h3>Upload Profile Photo</h3>
+
+            <form action="{{ url_for('upload_profile_photo') }}"
+                    method="POST"
+                    enctype="multipart/form-data">
+
+                <input type="file"
+                    name="photo"
+                    accept=".png,.jpg,.jpeg,.webp"
+                    required>
+
+                <button type="submit" class="btn">
+                    Upload Photo
+                </button>
+
+            </form>
+            
+            {% if user["profile_photo"] %}
+
+            <form action="{{ url_for('delete_profile_photo') }}"
+                  method="POST"
+                  onsubmit="return confirm('Are you sure you want to delete your profile photo?');">
+
+                <button type="submit"
+                        style="background: #dc2626; color: white; padding: 10px 20px;
+                               border: none; border-radius: 8px; cursor: pointer;
+                               margin-top: 12px;">
+                                🗑️ Delete Profile Photo
+                </button>
+
+            </form>
+
+            {% endif %}
+
+
+            <hr>
+
+            <a href="{{ url_for('edit_profile') }}" class="btn">
+                ✏️ Edit Profile
+            </a>
+
+            <a href="{{ url_for('change_password') }}" class="btn">
+                🔒 Change Password
+            </a>
+
+            <a href="{{ url_for('dashboard') }}" class="btn">
+                 ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+    
+<script>
+function openPhoto(src) {
+    alert("Profile photo clicked!");
+    const newWindow = window.open("", "_blank");
+
+    if (newWindow) {
+        newWindow.document.write(`
+            <html>
+            <head>
+                <title>Profile Photo</title>
+            </head>
+            <body style="margin:0; background:#0f172a;
+                display:flex; justify-content:center;
+                align-items:center; min-height:100vh;">
+
+                <button onclick="window.close()"
+                    style="position:fixed; top:20px; right:20px;
+                    padding:12px 20px; background:#7c3aed;
+                    color:white; border:0; border-radius:8px;
+                    cursor:pointer;">
+                    ✕ Close Photo
+                </button>
+
+                <img src="${src}"
+                    style="max-width:90%; max-height:90vh;">
+            </body>
+            </html>
+        `);
+        newWindow.document.close();
+    }
+}
+</script>   
+
+
+</body>
+</html>

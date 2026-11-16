@@ -1,0 +1,348 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>College Notices | CampusConnect</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(rgba(239,246,255,0.94),
+                        rgba(239,246,255,0.94)),
+                        url("{{ url_for('static', filename='college.jpeg') }}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #172554;
+        }
+
+        .notice-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 18px 5%;
+            background: #075985;
+            color: white;
+        }
+
+        .notice-navbar h2 {
+            margin: 0;
+        }
+
+        .notice-navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 600;
+        }
+
+        .notice-navbar a:hover {
+            color: #bfdbfe;
+        }
+
+        .notice-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .notice-heading {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .notice-heading h1 {
+            font-size: 42px;
+            color: #123f75;
+            margin-bottom: 10px;
+        }
+
+        .notice-heading p {
+            color: #475569;
+            font-size: 17px;
+        }
+
+        .notice-category-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            margin-bottom: 40px;
+        }
+
+        .notice-category {
+            background: rgba(255,255,255,0.95);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border-bottom: 5px solid #2563eb;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: 0.3s;
+        }
+
+        .notice-category:hover {
+            transform: translateY(-5px);
+        }
+
+        .notice-category h3 {
+            margin: 12px 0;
+            color: #123f75;
+        }
+
+        .notice-category p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .category-icon {
+            font-size: 35px;
+        }
+
+        .view-notices {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 10px 20px;
+            background: #2563eb;
+            color: white !important;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .view-notices:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .published-section {
+            background: rgba(255,255,255,0.97);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .published-section h2 {
+            color: #075985;
+            margin-bottom: 25px;
+        }
+
+        .published-notice {
+            padding: 20px;
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+            border-radius: 10px;
+            margin-bottom: 18px;
+        }
+
+        .published-notice h3 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+
+        .published-notice p {
+            color: #334155;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        .notice-category-label {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .empty-notice {
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            color: #64748b;
+            text-align: center;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #2563eb;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .notice-category-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .notice-heading h1 {
+                font-size: 30px;
+            }
+
+            .notice-navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="notice-navbar">
+
+        <h2>🎓 CampusConnect</h2>
+
+        <div>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('submit_complaint') }}">Submit Complaint</a>
+            <a href="{{ url_for('complaints') }}">My Complaints</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+
+    </nav>
+
+    <main class="notice-container">
+
+        <!-- Heading -->
+        <section class="notice-heading">
+
+            <h1>📢 College Notices</h1>
+
+            <p>
+                Stay updated with important college announcements,
+                examinations and events.
+            </p>
+
+        </section>
+
+        <!-- Notice Categories -->
+        <section class="notice-category-grid">
+
+            <!-- Academic -->
+            <div class="notice-category">
+
+                <div class="category-icon">📚</div>
+
+                <h3>Academic Notice</h3>
+
+                <p>
+                    Check academic announcements, syllabus updates
+                    and college information.
+                </p>
+
+                <a href="{{ url_for('notices', category='Academic') }}"
+                   class="view-notices">
+                    View Notices →
+                </a>
+
+            </div>
+
+            <!-- Examination -->
+            <div class="notice-category">
+
+                <div class="category-icon">📅</div>
+
+                <h3>Examination Notice</h3>
+
+                <p>
+                    Stay updated about examination schedules,
+                    timetables and instructions.
+                </p>
+
+                <a href="{{ url_for('notices', category='Examination') }}"
+                   class="view-notices">
+                    View Notices →
+                </a>
+
+            </div>
+
+            <!-- College Events -->
+            <div class="notice-category">
+
+                <div class="category-icon">🎓</div>
+
+                <h3>College Events</h3>
+
+                <p>
+                    Get information about upcoming college events,
+                    workshops and activities.
+                </p>
+
+                <a href="{{ url_for('notices', category='Events') }}"
+                   class="view-notices">
+                    View Notices →
+                </a>
+
+            </div>
+
+        </section>
+
+        <!-- Published Notices -->
+        <section class="published-section" id="published-notices">
+
+            {% if selected_category %}
+
+                <h2>
+                    📌 {{ selected_category }} Notices
+                </h2>
+
+                <a href="{{ url_for('notices') }}" class="back-link">
+                    ← View All Notices
+                </a>
+
+            {% else %}
+
+                <h2>📌 Latest Published Notices</h2>
+
+            {% endif %}
+
+            {% if notices %}
+
+                {% for notice in notices %}
+
+                    <div class="published-notice">
+
+                        <h3>📢 {{ notice['title'] }}</h3>
+
+                        <span class="notice-category-label">
+                            {{ notice['category'] or 'Academic' }}
+                        </span>
+
+                        <p>{{ notice['message'] }}</p>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty-notice">
+
+                    📭 No notices available in this category.
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+</body>
+</html>

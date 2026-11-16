@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Complaint - CampusConnect</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Edit Complaint</h1>
+
+        <form method="POST">
+
+            <label>Complaint Title:</label>
+            <input type="text"
+                   name="title"
+                   value="{{ complaint.title }}"
+                   required>
+
+            <label>Category:</label>
+            <input type="text"
+                   name="category"
+                   value="{{ complaint.category }}"
+                   required>
+
+            <label>Description:</label>
+            <textarea name="description"
+                      rows="6"
+                      required>{{ complaint.description }}</textarea>
+
+            <button type="submit" class="admin-btn">
+                Update Complaint
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="{{ url_for('admin_complaints') }}" class="admin-btn">
+            Back to Complaints
+        </a>
+
+    </div>
+
+</body>
+</html>

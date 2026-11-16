@@ -1,0 +1,1341 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect | College Helpdesk</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            width: 100%;
+            min-height: 75px;
+            padding: 15px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: bold;
+            color: #172554;
+        }
+
+        .logo span {
+            color: #2563eb;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #334155;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .login-btn, .register-btn {
+            padding: 11px 22px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .login-btn {
+            color: #2563eb;
+            border: 1px solid #2563eb;
+        }
+
+        .login-btn:hover {
+            background: #eff6ff;
+        }
+
+        .register-btn {
+            color: white;
+            background: #2563eb;
+        }
+
+        .register-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* COLLEGE HEADER */
+        .college-header {
+            text-align: center;
+            padding: 20px;
+            background: #eff6ff;
+        }
+
+        .college-header h1 {
+            color: #1e3a8a;
+            font-size: 23px;
+        }
+
+        .college-header p {
+            margin-top: 7px;
+            color: #475569;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            min-height: 590px;
+            padding: 75px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
+            background:
+                linear-gradient(90deg,
+                rgba(10, 25, 55, 0.92),
+                rgba(10, 25, 55, 0.68)),
+                url("{{ url_for('static', filename='college.jpeg') }}")
+                center/cover no-repeat;
+        }
+
+        .hero-content {
+            color: white;
+            max-width: 650px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(59,130,246,0.2);
+            color: #bfdbfe;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .hero-content h1 {
+            font-size: 54px;
+            line-height: 1.2;
+            margin: 25px 0;
+        }
+
+        .hero-content h1 span {
+            color: #60a5fa;
+        }
+
+        .hero-content > p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #e2e8f0;
+            max-width: 570px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .primary-btn, .secondary-btn {
+            display: inline-block;
+            padding: 15px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-3px);
+        }
+
+        .secondary-btn {
+            display: inline-block;
+            background: transparent !important;
+            color: white !important;
+            border: 2px solid white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .secondary-btn:hover {
+            background: white !important;
+            color: #1e3a8a !important;
+        }
+
+        
+
+        .stats {
+            display: flex;
+            gap: 45px;
+            margin-top: 45px;
+            flex-wrap: wrap;
+        }
+
+        .stats h3 {
+            font-size: 27px;
+            color: #93c5fd;
+        }
+
+        .stats p {
+            margin-top: 7px;
+            color: #e2e8f0;
+            font-size: 14px;
+        }
+
+        /* DASHBOARD CARD */
+        .dashboard-card {
+            width: 390px;
+            min-width: 300px;
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .card-header h3 {
+            color: #1e3a8a;
+            font-size: 19px;
+        }
+
+        .card-header p {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .status {
+            color: #16a34a;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .welcome-box {
+            background: #eff6ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 12px;
+        }
+
+        .welcome-box h2 {
+            color: #1e40af;
+            font-size: 20px;
+        }
+
+        .welcome-box p {
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .action-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .action-box:hover {
+            background: #eff6ff;
+            transform: translateY(-4px);
+        }
+
+        .card-link {
+            display: block;
+            padding: 15px 5px;
+            text-decoration: none;
+            color: #1e293b;
+        }
+
+        .action-icon {
+            font-size: 27px;
+            margin-bottom: 9px;
+        }
+
+        .action-box h3 {
+            font-size: 12px;
+        }
+
+        .action-box p {
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        .support-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f1f5f9;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .support-box span {
+            font-size: 27px;
+        }
+
+        .support-box p {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        /* COMMON SECTION */
+        .section-heading {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .section-heading span,
+        .team-heading span {
+            color: #2563eb;
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-size: 13px;
+        }
+
+        .section-heading h2,
+        .team-heading h2 {
+            font-size: 35px;
+            color: #172554;
+            margin: 13px 0;
+        }
+
+        .section-heading p,
+        .team-heading p {
+            color: #64748b;
+            line-height: 1.7;
+        }
+
+        /* NOTICES */
+        .college-notices {
+            max-width: 1150px;
+            margin: 70px auto;
+            padding: 35px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.06);
+        }
+
+        .notice-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .notice-heading span {
+            color: #2563eb;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .notice-heading h2 {
+            color: #172554;
+            font-size: 32px;
+            margin: 12px 0;
+        }
+
+        .notice-heading p {
+            color: #64748b;
+        }
+
+        .notice-item {
+            display: flex;
+            gap: 18px;
+            padding: 22px;
+            margin-bottom: 15px;
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+            border-radius: 10px;
+        }
+
+        .notice-icon {
+            font-size: 28px;
+        }
+
+        .notice-content {
+            flex: 1;
+        }
+
+        .notice-content h3 {
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+
+        .notice-content p {
+            color: #374151;
+            line-height: 1.7;
+        }
+
+        .notice-content small {
+            display: block;
+            margin-top: 8px;
+            color: #64748b;
+        }
+
+        .view-notices-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 13px 22px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .view-notices-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* FEATURES */
+        .features {
+            padding: 80px 7%;
+            background: #f1f5f9;
+        }
+
+        .feature-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px 23px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: #1e293b;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            border-bottom: 4px solid #2563eb;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-9px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+        }
+
+        .feature-icon {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            color: #1e3a8a;
+            margin-bottom: 13px;
+        }
+
+        .feature-card p {
+            color: #64748b;
+            line-height: 1.7;
+            font-size: 14px;
+            min-height: 75px;
+        }
+
+        .feature-link {
+            display: inline-block;
+            color: #2563eb;
+            font-weight: bold;
+            margin-top: 18px;
+        }
+
+        /* ABOUT */
+        .about {
+            padding: 90px 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 50px;
+            background: white;
+        }
+
+        .about > div:first-child {
+            max-width: 600px;
+        }
+
+        .about h2 {
+            color: #172554;
+            font-size: 38px;
+            line-height: 1.3;
+            margin: 20px 0;
+        }
+
+        .about p {
+            color: #64748b;
+            line-height: 1.9;
+            font-size: 16px;
+        }
+
+        .about-box {
+            background: #eff6ff;
+            padding: 35px;
+            border-radius: 15px;
+            min-width: 280px;
+            border-left: 5px solid #2563eb;
+        }
+
+        .about-box h3 {
+            color: #1e40af;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        /* TEAM */
+        .team-section {
+            padding: 80px 7%;
+            background: #f8fafc;
+        }
+
+        .team-heading {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .team-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+        }
+
+        .team-card {
+            background: white;
+            padding: 30px 15px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            transition: 0.3s;
+        }
+
+        .team-card:hover {
+            transform: translateY(-7px);
+        }
+
+        .team-avatar {
+            width: 75px;
+            height: 75px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 18px;
+            background: #dbeafe;
+            border-radius: 50%;
+            font-size: 38px;
+        }
+
+        .team-card h3 {
+            color: #1e3a8a;
+            margin-bottom: 8px;
+        }
+
+        .team-card p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 45px 20px;
+        }
+
+        footer .logo {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        footer p {
+            color: #cbd5e1;
+            margin-top: 10px;
+        }
+
+        .copyright {
+            font-size: 13px;
+            margin-top: 25px;
+            color: #94a3b8;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1000px) {
+            .hero {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .dashboard-card {
+                width: 100%;
+                max-width: 500px;
+            }
+
+            .feature-container,
+            .team-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .navbar {
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 15px;
+            }
+
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                gap: 18px;
+            }
+
+            .nav-buttons {
+                gap: 8px;
+            }
+
+            .login-btn, .register-btn {
+                padding: 9px 13px;
+                font-size: 13px;
+            }
+
+            .college-header h1 {
+                font-size: 18px;
+            }
+
+            .hero {
+                padding: 55px 6%;
+            }
+
+            .hero-content h1 {
+                font-size: 39px;
+            }
+
+            .hero-content > p {
+                font-size: 15px;
+            }
+
+            .stats {
+                gap: 22px;
+            }
+
+            .dashboard-card {
+                min-width: 0;
+                padding: 18px;
+            }
+
+            .quick-actions {
+                gap: 6px;
+            }
+
+            .action-box h3 {
+                font-size: 10px;
+            }
+
+            .college-notices {
+                margin: 35px 15px;
+                padding: 20px;
+            }
+
+            .notice-heading h2,
+            .section-heading h2,
+            .team-heading h2 {
+                font-size: 27px;
+            }
+
+            .features {
+                padding: 60px 6%;
+            }
+
+            .feature-container,
+            .team-container {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card p {
+                min-height: auto;
+            }
+
+            .about {
+                padding: 60px 7%;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .about h2 {
+                font-size: 30px;
+            }
+
+            .about-box {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .team-section {
+                padding: 60px 7%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">
+            Campus<span>Connect</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+            <a href="#college-notices">Notices</a>
+        </div>
+
+        <div class="nav-buttons">
+            <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+            <a href="{{ url_for('register') }}" class="register-btn">Register</a>
+        </div>
+    </nav>
+
+    <!-- COLLEGE HEADER -->
+    <header class="college-header">
+        <h1>Sushila Devi Bansal College of Technology</h1>
+        <p>CampusConnect - College Help Desk System</p>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <span class="tag">COLLEGE HELP DESK SYSTEM</span>
+
+            <h1>
+                Your Campus.<br>
+                Your Voice.<br>
+                <span>Your Solution.</span>
+            </h1>
+
+            <p>
+                A smart platform for students to submit complaints,
+                track requests and connect with college administration.
+                Making campus communication easier and faster.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="{{ url_for('login') }}" class="primary-btn">
+                    Student Login →
+                </a>
+
+                <a href="{{ url_for('register') }}" class="secondary-btn">
+                    Create Account
+                </a>
+            </div>
+
+            <div class="stats">
+                <div>
+                    <h3>24/7</h3>
+                    <p>Online Access</p>
+                </div>
+
+                <div>
+                    <h3>Easy</h3>
+                    <p>Complaint Tracking</p>
+                </div>
+
+                <div>
+                    <h3>Smart</h3>
+                    <p>Student Support</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- DASHBOARD CARD -->
+        <div class="dashboard-card">
+
+            <div class="card-header">
+                <div>
+                    <h3>Student Dashboard</h3>
+                    <p>Welcome to CampusConnect</p>
+                </div>
+
+                <span class="status">● Active</span>
+            </div>
+
+            <div class="welcome-box">
+                <h2>Hello, {{ session.get('name', 'Student') }} 👋</h2>
+                <p>How can we help you today?</p>
+            </div>
+
+            <div class="quick-actions">
+
+                <div class="action-box">
+                    <a href="/complaint/new" class="card-link">
+                        <div class="action-icon">📝</div>
+                        <h3>Submit Complaint</h3>
+                        <p>Report your issue</p>
+                    </a>
+                </div>
+
+                <div class="action-box">
+                    <a href="/complaints" class="card-link">
+                        <div class="action-icon">📊</div>
+                        <h3>Track Status</h3>
+                        <p>Check progress</p>
+                    </a>
+                </div>
+
+                <div class="action-box">
+                    <a href="/notices" class="card-link">
+                        <div class="action-icon">📢</div>
+                        <h3>College Notices</h3>
+                        <p>Latest updates</p>
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="support-box">
+                <span>💡</span>
+                <div>
+                    <strong>Need Help?</strong>
+                    <p>We are here to support you.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- LATEST COLLEGE NOTICES -->
+    <section class="college-notices" id="college-notices">
+
+        <div class="notice-heading">
+            <span>📢 COLLEGE UPDATES</span>
+            <h2>Latest College Notices</h2>
+            <p>Important announcements from college administration</p>
+        </div>
+
+        {% if notices %}
+
+            {% for notice in notices %}
+
+                <div class="notice-item">
+                    <div class="notice-icon">📢</div>
+
+                    <div class="notice-content">
+                        <h3>{{ notice['title'] }}</h3>
+                        <p>{{ notice['message'] }}</p>
+
+                        {% if notice['created_at'] %}
+                            <small>
+                                Published: {{ notice['created_at'] }}
+                            </small>
+                        {% endif %}
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="notice-item">
+                <div class="notice-icon">📢</div>
+
+                <div class="notice-content">
+                    <h3>No Notices Available</h3>
+                    <p>College announcements will appear here.</p>
+                </div>
+            </div>
+
+        {% endif %}
+
+        <a href="{{ url_for('notices') }}" class="view-notices-btn">
+            View All Notices →
+        </a>
+
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section class="features" id="features">
+
+        <div class="section-heading">
+            <span>OUR FEATURES</span>
+            <h2>Everything You Need</h2>
+            <p>Making college support simpler and smarter.</p>
+        </div>
+
+        <div class="feature-container">
+
+            <a href="/complaint/new" class="feature-card">
+                <div class="feature-icon">📝</div>
+                <h3>Complaint Management</h3>
+                <p>
+                    Submit college complaints easily through
+                    a simple and user-friendly interface.
+                </p>
+                <span class="feature-link">Submit Complaint →</span>
+            </a>
+
+            <a href="/complaints" class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>Status Tracking</h3>
+                <p>
+                    Track complaint progress and stay informed
+                    about the latest updates.
+                </p>
+                <span class="feature-link">Track Complaints →</span>
+            </a>
+
+            <a href="/dashboard" class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h3>Student Account</h3>
+                <p>
+                    Access your personal student dashboard
+                    and manage your account securely.
+                </p>
+                <span class="feature-link">Open Dashboard →</span>
+            </a>
+
+            <a href="/notices" class="feature-card">
+                <div class="feature-icon">📢</div>
+                <h3>College Notices</h3>
+                <p>
+                    Stay updated with important college
+                    announcements and notifications.
+                </p>
+                <span class="feature-link">View Notices →</span>
+            </a>
+
+        </div>
+
+    </section>
+    
+
+<!-- WHY CAMPUSCONNECT SECTION -->
+<section class="extra-section">
+    <div class="extra-heading">
+        <span>WHY CAMPUSCONNECT</span>
+        <h2>Why Choose CampusConnect?</h2>
+        <p>CampusConnect makes communication between students and college administration simple, fast and transparent.</p>
+    </div>
+
+    <div class="why-grid">
+        <div class="extra-card">
+            <div class="big-icon">⚡</div>
+            <h3>Fast Communication</h3>
+            <p>Get important college updates and notices in one place without unnecessary delays.</p>
+        </div>
+
+        <div class="extra-card">
+            <div class="big-icon">🔒</div>
+            <h3>Secure Platform</h3>
+            <p>Student accounts and information are managed through a dedicated platform.</p>
+        </div>
+
+        <div class="extra-card">
+            <div class="big-icon">📱</div>
+            <h3>Easy to Use</h3>
+            <p>Access important campus services through a simple and user-friendly interface.</p>
+        </div>
+    </div>
+</section>
+
+<!-- OUR SERVICES SECTION -->
+<section class="extra-section alt-section">
+    <div class="extra-heading">
+        <span>OUR SERVICES</span>
+        <h2>Everything You Need in One Place</h2>
+        <p>Explore useful digital services designed to improve your campus experience.</p>
+    </div>
+
+    <div class="service-grid">
+        <div class="extra-card">
+            <div class="big-icon">📝</div>
+            <h3>Online Complaints</h3>
+            <p>Submit your campus-related complaints online and track their progress.</p>
+        </div>
+
+        <div class="extra-card">
+            <div class="big-icon">📢</div>
+            <h3>College Notices</h3>
+            <p>Stay updated with important announcements and college information.</p>
+        </div>
+
+        <div class="extra-card">
+            <div class="big-icon">👤</div>
+            <h3>Student Profile</h3>
+            <p>Manage your personal profile and keep your student information updated.</p>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS SECTION -->
+<section class="extra-section">
+    <div class="extra-heading">
+        <span>SIMPLE PROCESS</span>
+        <h2>How CampusConnect Works</h2>
+        <p>Get started with just four simple steps.</p>
+    </div>
+
+    <div class="process-grid">
+        <div class="process-card">
+            <div class="process-number">1</div>
+            <h3>Create Account</h3>
+            <p>Register yourself on CampusConnect.</p>
+        </div>
+
+        <div class="process-card">
+            <div class="process-number">2</div>
+            <h3>Login</h3>
+            <p>Login using your registered details.</p>
+        </div>
+
+        <div class="process-card">
+            <div class="process-number">3</div>
+            <h3>Use Services</h3>
+            <p>Access notices and submit complaints.</p>
+        </div>
+
+        <div class="process-card">
+            <div class="process-number">4</div>
+            <h3>Track Updates</h3>
+            <p>Check the latest status of your complaints.</p>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- STUDENT BENEFITS SECTION -->
+<section class="extra-section alt-section">
+    <div class="extra-heading">
+        <span>STUDENT BENEFITS</span>
+        <h2>Benefits for Every Student</h2>
+        <p>CampusConnect helps students stay informed, connected and involved in campus activities.</p>
+    </div>
+
+    <div class="benefit-grid">
+        <div class="extra-card">
+            <div class="big-icon">⏰</div>
+            <h3>Save Time</h3>
+            <p>Access important campus services online instead of visiting different offices for every update.</p>
+        </div>
+
+        <div class="extra-card">
+            <div class="big-icon">📊</div>
+            <h3>Track Progress</h3>
+            <p>Follow the progress of submitted complaints and check their latest status.</p>
+        </div>
+
+        <div class="extra-card">
+            <div class="big-icon">🤝</div>
+            <h3>Better Connection</h3>
+            <p>Improve communication between students and college administration.</p>
+        </div>
+    </div>
+</section>
+
+<!-- COMPLAINT CATEGORIES SECTION -->
+<section class="extra-section">
+    <div class="extra-heading">
+        <span>COMPLAINT MANAGEMENT</span>
+        <h2>Different Complaint Categories</h2>
+        <p>Students can report different types of campus-related problems.</p>
+    </div>
+
+    <div class="category-grid">
+        <div class="category-card">
+            <h3>🏫 Classroom Issues</h3>
+            <p>Report problems related to classrooms, furniture and maintenance.</p>
+        </div>
+
+        <div class="category-card">
+            <h3>💻 Computer Lab</h3>
+            <p>Report computer, internet and laboratory equipment problems.</p>
+        </div>
+
+        <div class="category-card">
+            <h3>🚰 Water Facilities</h3>
+            <p>Report drinking water and water supply related issues.</p>
+        </div>
+
+        <div class="category-card">
+            <h3>🧹 Cleanliness</h3>
+            <p>Share concerns about campus cleanliness and hygiene.</p>
+        </div>
+
+        <div class="category-card">
+            <h3>💡 Electricity</h3>
+            <p>Report lighting, fan and electricity-related problems.</p>
+        </div>
+
+        <div class="category-card">
+            <h3>🪑 Infrastructure</h3>
+            <p>Report damaged furniture and other infrastructure issues.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CAMPUS FACILITIES SECTION -->
+<section class="extra-section alt-section">
+    <div class="extra-heading">
+        <span>CAMPUS FACILITIES</span>
+        <h2>A Better Campus Experience</h2>
+        <p>A well-managed campus creates a better environment for learning and growth.</p>
+    </div>
+
+    <div class="facility-grid">
+        <div class="facility-card">
+            <div class="big-icon">📚</div>
+            <h3>Library</h3>
+            <p>A place for learning, reading and academic resources.</p>
+        </div>
+
+        <div class="facility-card">
+            <div class="big-icon">🔬</div>
+            <h3>Laboratories</h3>
+            <p>Practical learning through laboratory facilities.</p>
+        </div>
+
+        <div class="facility-card">
+            <div class="big-icon">🏟️</div>
+            <h3>Sports Facilities</h3>
+            <p>Facilities that encourage fitness and teamwork.</p>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- DIGITAL CAMPUS SECTION -->
+<section class="digital-banner">
+    <h2>Building a Digital Campus</h2>
+    <p>CampusConnect is a step towards making campus communication smarter and more accessible. Our goal is to bring useful student services together on one digital platform.</p>
+</section>
+
+<!-- MISSION AND VISION SECTION -->
+<section class="extra-section">
+    <div class="extra-heading">
+        <span>OUR PURPOSE</span>
+        <h2>Mission & Vision</h2>
+        <p>Our aim is to make campus communication more effective and student-friendly.</p>
+    </div>
+
+    <div class="mission-grid">
+        <div class="mission-card">
+            <h3>🎯 Our Mission</h3>
+            <p>To provide students with a simple digital platform where they can access college notices, submit complaints and communicate their concerns effectively.</p>
+        </div>
+
+        <div class="mission-card">
+            <h3>🌟 Our Vision</h3>
+            <p>To contribute towards a smarter and more connected campus where technology makes everyday college services easier.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ SECTION -->
+<section class="extra-section alt-section">
+    <div class="extra-heading">
+        <span>HAVE QUESTIONS?</span>
+        <h2>Frequently Asked Questions</h2>
+        <p>Some common questions about CampusConnect.</p>
+    </div>
+
+    <div class="faq-grid">
+        <div class="faq-item">
+            <h3>1. What is CampusConnect?</h3>
+            <p>CampusConnect is a digital platform designed to help students access campus services and information.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>2. How can I register?</h3>
+            <p>Visit the registration page and fill in the required details to create your account.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>3. Can I submit complaints online?</h3>
+            <p>Yes, registered students can submit campus-related complaints through the platform.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>4. Can I track my complaint?</h3>
+            <p>Yes, students can check the latest status of their submitted complaints.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>5. Where can I find college notices?</h3>
+            <p>You can visit the College Notices section to view available announcements.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>6. Is registration required?</h3>
+            <p>Yes, you need an account to access student-specific services.</p>
+        </div>
+    </div>
+</section>
+
+<!-- STUDENT SUPPORT SECTION -->
+<section class="support-banner">
+    <h2>Need Help? We Are Here!</h2>
+    <p>CampusConnect aims to make your campus experience easier. Explore the available services and stay connected with your college.</p>
+    <a href="{{ url_for('login') }}">Get Started</a>
+</section>
+
+<!-- JOIN CAMPUSCONNECT SECTION -->
+<section class="join-section">
+    <h2>Be a Part of CampusConnect</h2>
+    <p>Join the digital campus community and experience a smarter way to stay informed and connected.</p>
+    <a href="{{ url_for('register') }}">Create Your Account</a>
+</section>
+
+    <!-- ABOUT SECTION -->
+    <section class="about" id="about">
+
+        <div>
+            <span class="tag">ABOUT CAMPUSCONNECT</span>
+
+            <h2>
+                Bridging Students<br>
+                and Administration
+            </h2>
+
+            <p>
+                CampusConnect is a college helpdesk management system
+                designed to simplify communication between students
+                and college administration. Students can submit
+                complaints, track their status and receive important
+                college announcements through one platform.
+            </p>
+        </div>
+
+        <div class="about-box">
+            <h3>Our Mission</h3>
+            <p>
+                To create a transparent, accessible and efficient
+                student support experience by connecting students
+                and college administration digitally.
+            </p>
+        </div>
+
+    </section>
+
+    <!-- TEAM SECTION -->
+    <section class="team-section">
+
+        <div class="team-heading">
+            <span>OUR TEAM</span>
+            <h2>Meet Our Team</h2>
+            <p>The people behind CampusConnect</p>
+        </div>
+
+        <div class="team-container">
+
+            <div class="team-card">
+                <div class="team-avatar">👨‍💻</div>
+                <h3>Shubham Bais</h3>
+                <p>Project Developer</p>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">👨‍💻</div>
+                <h3>Anmol Hardiya</h3>
+                <p>Team Member</p>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">👨‍💻</div>
+                <h3>Lucky Singh Devda</h3>
+                <p>Team Member</p>
+            </div>
+
+            <div class="team-card">
+                <div class="team-avatar">👨‍💻</div>
+                <h3>Nikhil Dayma</h3>
+                <p>Team Member</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+
+        <div class="logo">
+            Campus<span>Connect</span>
+        </div>
+
+        <p>College Helpdesk Management System</p>
+        <p>Sushila Devi Bansal College of Technology</p>
+
+        <p class="copyright">
+            © 2026 CampusConnect | College Project
+        </p>
+
+    </footer>
+
+</body>
+</html>

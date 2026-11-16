@@ -1,0 +1,623 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect | Admin Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .admin-container {
+            max-width: 1250px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 18px 5%;
+            background: #0f172a;
+            color: white;
+        }
+
+        .navbar h2 {
+            margin: 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 600;
+        }
+
+        .navbar a:hover {
+            color: #93c5fd;
+        }
+
+        /* Header */
+        .admin-header {
+            background: linear-gradient(135deg, #075985, #2563eb);
+            color: white;
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.18);
+        }
+
+        .admin-header h1 {
+            margin: 0 0 10px;
+        }
+
+        .admin-header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        /* Flash Messages */
+        .flash-message {
+            background: #ecfdf5;
+            color: #065f46;
+            padding: 13px 16px;
+            border-radius: 9px;
+            margin-bottom: 15px;
+            border-left: 4px solid #059669;
+        }
+
+        /* Statistics */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border-top: 4px solid #2563eb;
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0 0 12px;
+        }
+
+        .stat-card p {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 0;
+            color: #0f172a;
+        }
+
+        .stat-pending {
+            border-top-color: #f59e0b;
+        }
+
+        .stat-progress {
+            border-top-color: #2563eb;
+        }
+
+        .stat-resolved {
+            border-top-color: #059669;
+        }
+
+        .stat-students {
+            border-top-color: #7c3aed;
+        }
+
+        /* General Sections */
+        .section-card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        }
+
+        .section-title {
+            color: #1e3a8a;
+            margin: 0 0 20px;
+            padding-bottom: 13px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        /* Buttons */
+        .admin-btn {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            padding: 11px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px 5px 5px 0;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .admin-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .green-btn {
+            background: #059669;
+        }
+
+        .green-btn:hover {
+            background: #047857;
+        }
+
+        /* Search */
+        .student-search {
+            margin: 18px 0;
+        }
+
+        .student-search input {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 15px;
+        }
+
+        .student-search input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        /* Tables */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th, td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #1e40af;
+            font-size: 14px;
+        }
+
+        td {
+            color: #475569;
+            font-size: 14px;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        /* Status */
+        .status-label {
+            display: inline-block;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            background: #e0f2fe;
+            color: #075985;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-in-progress {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-resolved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* Complaint and Notice Items */
+        .record-card {
+            padding: 17px;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #2563eb;
+            border-radius: 10px;
+            margin-bottom: 13px;
+            background: #ffffff;
+        }
+
+        .record-card h3 {
+            margin: 0 0 10px;
+            color: #1e40af;
+        }
+
+        .record-card p {
+            margin: 7px 0;
+            color: #475569;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .notice-record {
+            border-left-color: #059669;
+        }
+
+        .notice-record h3 {
+            color: #047857;
+        }
+
+        /* Notice Form */
+        .notice-form label {
+            display: block;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .notice-form input,
+        .notice-form select,
+        .notice-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 7px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 15px;
+        }
+
+        .notice-form input:focus,
+        .notice-form select:focus,
+        .notice-form textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .empty-message {
+            background: #f8fafc;
+            color: #64748b;
+            padding: 22px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .search-message {
+            display: none;
+            color: #dc2626;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .section-actions {
+            margin-bottom: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .admin-container {
+                padding: 12px;
+                margin: 20px auto;
+            }
+
+            .admin-header {
+                padding: 23px;
+            }
+
+            .admin-header h1 {
+                font-size: 24px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+            .stat-card p {
+                font-size: 25px;
+            }
+
+            .section-card {
+                padding: 17px;
+            }
+
+            .navbar {
+                padding: 16px 5%;
+            }
+
+            .navbar a {
+                margin-left: 10px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <h2>CampusConnect Admin</h2>
+
+    <div>
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+<main class="admin-container">
+
+    <!-- Dashboard Header -->
+    <div class="admin-header">
+        <h1>👨‍💼 Admin Dashboard</h1>
+        <p>Manage students, complaints and college notices from one place.</p>
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <p class="flash-message">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <!-- Dashboard Statistics -->
+    <section class="stats-grid">
+
+        <div class="stat-card stat-students">
+            <h3>👨‍🎓 Total Students</h3>
+            <p>{{ total_students }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>📋 Total Complaints</h3>
+            <p>{{ total_complaints }}</p>
+        </div>
+
+        <div class="stat-card stat-pending">
+            <h3>⏳ Pending</h3>
+            <p>{{ pending_complaints }}</p>
+        </div>
+
+        <div class="stat-card stat-progress">
+            <h3>🔄 In Progress</h3>
+            <p>{{ progress_complaints }}</p>
+        </div>
+
+        <div class="stat-card stat-resolved">
+            <h3>✅ Resolved</h3>
+            <p>{{ resolved_complaints }}</p>
+        </div>
+
+    </section>
+    
+<!-- Complaint Statistics Chart -->
+
+
+
+    <!-- Quick Actions -->
+    
+<section class="section-card">
+
+    <h2 class="section-title">⚡ Quick Actions</h2>
+
+    
+<a href="{{ url_for('admin_students') }}" class="admin-btn">
+    👨‍🎓 View All Students
+</a>
+
+<a href="{{ url_for('create_student') }}" class="admin-btn"
+   style="background:#7c3aed;">
+    ➕ Create Student Account
+</a>
+
+<a href="{{ url_for('admin_complaints') }}" class="admin-btn green-btn">
+    📋 View All Complaints
+</a>
+
+
+    <hr style="margin:25px 0; border:0; border-top:1px solid #e2e8f0;">
+
+    <h3 style="color:#1e3a8a; margin-bottom:20px;">
+        📊 Complaint Status Overview
+    </h3>
+
+    <div style="margin-bottom:22px;">
+        <strong>⏳ Pending: {{ pending_complaints }}</strong>
+        <div style="background:#e2e8f0; height:14px; border-radius:20px;">
+            <div style="background:#f59e0b; height:14px; width:33%; border-radius:20px;"></div>
+        </div>
+    </div>
+
+    <div style="margin-bottom:22px;">
+        <strong>🔄 In Progress: {{ progress_complaints }}</strong>
+        <div style="background:#e2e8f0; height:14px; border-radius:20px;">
+            <div style="background:#2563eb; height:14px; width:33%; border-radius:20px;"></div>
+        </div>
+    </div>
+
+    <div style="margin-bottom:10px;">
+        <strong>✅ Resolved: {{ resolved_complaints }}</strong>
+        <div style="background:#e2e8f0; height:14px; border-radius:20px;">
+            <div style="background:#059669; height:14px; width:33%; border-radius:20px;"></div>
+        </div>
+    </div>
+
+    <p>Total Complaints: <strong>{{ total_complaints }}</strong></p>
+
+</section>
+
+
+    <!-- Registered Students -->
+    
+
+    <!-- Recent Complaints -->
+    
+
+    <!-- Recent Notices -->
+    <section class="section-card">
+
+        <h2 class="section-title">📢 Recent College Notices</h2>
+
+        {% for notice in recent_notices %}
+
+            <div class="record-card notice-record">
+
+                <h3>{{ notice.title }}</h3>
+
+                <p>
+                    <strong>Category:</strong>
+                    {{ notice.category or 'Academic' }}
+                </p>
+
+                <p>{{ notice.message }}</p>
+
+                <p>
+                    <strong>Published:</strong>
+                    {{ notice.created_at }}
+                </p>
+
+                <form method="POST"
+                        action="{{ url_for('delete_notice', notice_id=notice.id) }}"
+                        onsubmit="return confirm('Are you sure you want to delete this notice?');">
+
+                    <button type="submit"
+                        class="admin-btn"
+                        style="background:#dc2626;">
+                            🗑️ Delete Notice
+                    </button>
+
+                </form>
+
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-message">
+                No notices published yet.
+            </div>
+
+        {% endfor %}
+
+    </section>
+
+    <!-- Publish College Notice -->
+    <section class="section-card">
+
+        <h2 class="section-title">📢 Publish College Notice</h2>
+
+        <form method="POST"
+              action="{{ url_for('add_notice') }}"
+              class="notice-form">
+
+            <label>Notice Title</label>
+
+            <input type="text"
+                   name="title"
+                   placeholder="Enter notice title"
+                   required>
+
+            <label>Notice Category</label>
+
+            <select name="category" required>
+                <option value="">Select Category</option>
+                <option value="Academic">Academic Notice</option>
+                <option value="Examination">Examination Notice</option>
+                <option value="Events">College Events</option>
+            </select>
+
+            <label>Notice Message</label>
+
+            <textarea name="message"
+                      rows="5"
+                      placeholder="Write your notice message..."
+                      required></textarea>
+
+            <button type="submit" class="admin-btn green-btn">
+                📢 Publish Notice
+            </button>
+
+        </form>
+
+    </section>
+
+</main>
+
+<!-- Student Search JavaScript -->
+<script>
+    const searchInput = document.getElementById("studentSearch");
+    const searchMessage = document.getElementById("searchMessage");
+    const studentRecords = document.querySelectorAll(".student-record");
+
+    searchInput.addEventListener("input", function () {
+
+        const searchValue = this.value.toLowerCase().trim();
+        let visibleStudents = 0;
+
+        studentRecords.forEach(function (record) {
+
+            const studentDetails = record.textContent.toLowerCase();
+
+            if (studentDetails.includes(searchValue)) {
+                record.style.display = "";
+                visibleStudents++;
+            } else {
+                record.style.display = "none";
+            }
+
+        });
+
+        if (visibleStudents === 0 && studentRecords.length > 0) {
+            searchMessage.style.display = "block";
+        } else {
+            searchMessage.style.display = "none";
+        }
+
+    });
+</script>
+
+</body>
+</html>

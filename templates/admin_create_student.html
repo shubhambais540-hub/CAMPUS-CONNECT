@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Student Account | CampusConnect</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #ede9fe, #fdf4ff);
+            margin: 0;
+            padding: 30px 15px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 25px auto;
+            background: white;
+            padding: 32px;
+            border-radius: 18px;
+            box-shadow: 0 12px 35px rgba(91, 33, 182, 0.13);
+            border: 1px solid #ede9fe;
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #6d28d9, #c026d3);
+            color: white;
+            padding: 25px 15px;
+            border-radius: 13px;
+            margin-bottom: 25px;
+        }
+
+        .header h2 {
+            margin: 0 0 8px;
+            font-size: 25px;
+        }
+
+        .header p {
+            margin: 0;
+            color: #f3e8ff;
+        }
+
+        label {
+            display: block;
+            margin-top: 17px;
+            font-weight: 600;
+            color: #4c1d95;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 13px;
+            margin-top: 7px;
+            border: 1px solid #ddd6fe;
+            border-radius: 8px;
+            font-size: 15px;
+            background: #faf5ff;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: #9333ea;
+            box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.12);
+            background: white;
+        }
+
+        .create-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 25px;
+            background: linear-gradient(135deg, #7c3aed, #c026d3);
+            color: white;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .create-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px rgba(124, 58, 237, 0.25);
+        }
+
+        .success {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-left: 5px solid #059669;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow-wrap: anywhere;
+        }
+
+        .success h3 {
+            color: #047857;
+            margin-top: 0;
+        }
+
+        .password {
+            font-size: 21px;
+            font-weight: bold;
+            color: #166534;
+            background: white;
+            padding: 12px;
+            border: 1px dashed #10b981;
+            border-radius: 8px;
+        }
+
+        .copy-btn {
+            width: 100%;
+            padding: 11px;
+            margin-top: 12px;
+            background: #059669;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .flash {
+            background: #fff1f2;
+            color: #be123c;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            color: #7c3aed;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back:hover {
+            color: #c026d3;
+        }
+
+        @media(max-width: 500px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h2 {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h2>🎓 Create Student Account</h2>
+        <p>CampusConnect | Admin Portal</p>
+    </div>
+
+    {% if temporary_password %}
+
+    <div class="success">
+        <h3>✅ Account Created Successfully!</h3>
+
+        <p><strong>Student:</strong> {{ student_name }}</p>
+        <p><strong>Email:</strong> {{ student_email }}</p>
+
+        <p><strong>Temporary Password:</strong></p>
+
+        <div class="password" id="tempPassword">
+            {{ temporary_password }}
+        </div>
+
+        <button type="button" class="copy-btn" onclick="copyPassword()">
+            📋 Copy Temporary Password
+        </button>
+
+        <p>Give this password securely to the student.
+           Student must change it after first login.</p>
+    </div>
+
+    {% else %}
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <p class="flash">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST">
+
+        <label>Student Name</label>
+        <input type="text" name="name" placeholder="Enter student name" required>
+
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Enter username" required>
+
+        <label>Email Address</label>
+        <input type="email" name="email" placeholder="Enter email address" required>
+
+        <label>Enrollment / Roll Number</label>
+        <input type="text" name="roll_no" placeholder="Enter enrollment number" required>
+
+        <label>Gender</label>
+        <select name="gender" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label>Branch</label>
+        <input type="text" name="branch" placeholder="Example: Information Technology" required>
+
+        <label>Course</label>
+        <input type="text" name="course" placeholder="Example: B.Tech" required>
+
+        <button type="submit" class="create-btn">
+            ✨ Create Student Account
+        </button>
+
+    </form>
+
+    {% endif %}
+
+    <a class="back" href="{{ url_for('admin_dashboard') }}">
+        ← Back to Admin Dashboard
+    </a>
+
+</div>
+
+<script>
+function copyPassword() {
+    const password = document.getElementById("tempPassword").innerText.trim();
+
+    navigator.clipboard.writeText(password).then(() => {
+        alert("Temporary password copied!");
+    }).catch(() => {
+        alert("Copy failed. Please copy the password manually.");
+    });
+}
+</script>
+
+</body>
+</html>

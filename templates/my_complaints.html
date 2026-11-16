@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Complaint Tracking - CampusConnect</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="tracking-page">
+
+    <header class="tracking-header">
+        <h1>📋 My Complaint Tracking</h1>
+        <p>Track your complaints and monitor their progress.</p>
+    </header>
+
+    <div class="tracking-container">
+
+        {% if complaints %}
+
+            {% for complaint in complaints %}
+
+            <div class="tracking-card">
+
+                <div class="tracking-card-header">
+                    <div>
+                        <h2>{{ complaint.title }}</h2>
+                        <p>Complaint ID: #{{ complaint.id }}</p>
+                    </div>
+
+                    <span class="tracking-status
+                        {% if complaint.status == 'Resolved' %}resolved
+                        {% elif complaint.status == 'In Progress' %}progress
+                        {% else %}pending{% endif %}">
+                        {{ complaint.status }}
+                    </span>
+                </div>
+
+                <div class="tracking-details">
+
+                    {% if complaint.photo %}
+                        <p><strong>Uploaded Evidence:</strong></p>
+
+                        <a href="{{ url_for('static', filename='uploads/complaints/' + complaint.photo) }}"
+                            target="_blank">
+
+                            <img
+                                src="{{ url_for('static', filename='uploads/complaints/' + complaint.photo) }}"
+                                alt="Complaint Evidence"
+                                style="width:150px; max-height:120px; object-fit:cover; border-radius:10px;">
+
+                            <p>View Full Photo</p>
+                        </a>
+                    {% else %}
+                        <p><strong>Uploaded Evidence:</strong> No Photo</p>
+                    {% endif %}
+
+                    
+                    <p><strong>Category:</strong> {{ complaint.category }}</p>
+                    <p><strong>Description:</strong> {{ complaint.description }}</p>
+                </div>
+
+                <h3>Complaint Progress</h3>
+
+                <div class="tracking-timeline">
+
+                    <div class="timeline-item completed">
+                        <span class="timeline-dot">✓</span>
+                        <div>
+                            <strong>Complaint Submitted</strong>
+                            <p>Your complaint has been submitted.</p>
+                        </div>
+                    </div>
+
+                    {% for item in complaint_history %}
+
+                    {% endfor %}
+
+                    {% if complaint.status == 'Pending' %}
+                    <div class="timeline-item active">
+                        <span class="timeline-dot">2</span>
+                        <div>
+                            <strong>Pending</strong>
+                            <p>Your complaint is waiting for review.</p>
+                        </div>
+                    </div>
+
+                    {% elif complaint.status == 'In Progress' %}
+                    <div class="timeline-item completed">
+                        <span class="timeline-dot">✓</span>
+                        <div>
+                            <strong>In Progress</strong>
+                            <p>Admin is working on your complaint.</p>
+                        </div>
+                    </div>
+
+                    {% elif complaint.status == 'Resolved' %}
+                    <div class="timeline-item completed">
+                        <span class="timeline-dot">✓</span>
+                        <div>
+                            <strong>In Progress</strong>
+                            <p>Your complaint was being processed.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item completed">
+                        <span class="timeline-dot">✓</span>
+                        <div>
+                            <strong>Resolved</strong>
+                            <p>Your complaint has been resolved.</p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <div class="tracking-history">
+                    <h3>Status Update History</h3>
+
+                    {% if complaint_history[complaint.id] %}
+
+                        {% for item in complaint_history[complaint.id] %}
+                        <p>
+                            <strong>{{ item.new_status }}</strong>
+                            — {{ item.updated_at }}
+                        </p>
+                        {% endfor %}
+
+                    {% else %}
+                        <p>No status updates yet.</p>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="no-complaints">
+                <h2>📭 No Complaints Found</h2>
+                <p>You have not submitted any complaints yet.</p>
+            </div>
+
+        {% endif %}
+
+        <div class="tracking-back">
+            <a href="{{ url_for('dashboard') }}">
+                ← Back to Student Dashboard
+            </a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

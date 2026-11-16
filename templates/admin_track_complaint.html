@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Tracking - CampusConnect</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="tracking-page">
+
+    <header class="tracking-header">
+        <h1>📊 Complaint Tracking Dashboard</h1>
+        <p>Complete complaint progress and status history</p>
+    </header>
+
+    <div class="tracking-container">
+
+        <div class="tracking-card">
+
+            <div class="tracking-card-header">
+                <div>
+                    <h2>{{ complaint.title }}</h2>
+                    <p>Complaint ID: #{{ complaint.id }}</p>
+                </div>
+
+                <span class="tracking-status
+                    {% if complaint.status == 'Resolved' %}resolved
+                    {% elif complaint.status == 'In Progress' %}progress
+                    {% else %}pending{% endif %}">
+                    {{ complaint.status }}
+                </span>
+            </div>
+
+            <div class="tracking-details">
+                <p><strong>Student:</strong> {{ complaint.name }}</p>
+                <p><strong>Email:</strong> {{ complaint.email }}</p>
+                <p><strong>Category:</strong> {{ complaint.category }}</p>
+                <p><strong>Description:</strong> {{ complaint.description }}</p>
+            </div>
+
+            <h3>Complaint Progress</h3>
+
+            <div class="tracking-timeline">
+
+                <div class="timeline-item completed">
+                    <span class="timeline-dot">✓</span>
+                    <div>
+                        <strong>Complaint Submitted</strong>
+                        <p>Complaint registered successfully.</p>
+                    </div>
+                </div>
+
+                {% if complaint.status == 'Pending' %}
+
+                <div class="timeline-item active">
+                    <span class="timeline-dot">2</span>
+                    <div>
+                        <strong>Pending</strong>
+                        <p>Waiting for admin review.</p>
+                    </div>
+                </div>
+
+                {% elif complaint.status == 'In Progress' %}
+
+                <div class="timeline-item completed">
+                    <span class="timeline-dot">✓</span>
+                    <div>
+                        <strong>In Progress</strong>
+                        <p>Admin is working on this complaint.</p>
+                    </div>
+                </div>
+
+                {% elif complaint.status == 'Resolved' %}
+
+                <div class="timeline-item completed">
+                    <span class="timeline-dot">✓</span>
+                    <div>
+                        <strong>In Progress</strong>
+                        <p>Complaint was being processed.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item completed">
+                    <span class="timeline-dot">✓</span>
+                    <div>
+                        <strong>Resolved</strong>
+                        <p>Complaint has been resolved.</p>
+                    </div>
+                </div>
+
+                {% endif %}
+
+            </div>
+
+            <div class="tracking-history">
+
+                <h3>📜 Complete Status Update History</h3>
+
+                {% if history %}
+
+                    {% for item in history %}
+
+                    <p>
+                        <strong>{{ item.old_status }}</strong>
+                        →
+                        <strong>{{ item.new_status }}</strong>
+                        <br>
+                        <small>{{ item.updated_at }}</small>
+                    </p>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <p>No status changes recorded yet.</p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <div class="tracking-back">
+            <a href="{{ url_for('admin_complaints') }}">
+                ← Back to All Complaints
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,609 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CampusConnect | Student Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #172554;
+
+            background:
+                linear-gradient(
+                    rgba(219, 234, 254, 0.82),
+                    rgba(239, 246, 255, 0.92)
+                ),
+                url("{{ url_for('static', filename='college.jpeg') }}");
+
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Navbar */
+
+        .dashboard-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+
+            padding: 18px 5%;
+
+            background: #075985;
+            color: white;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .nav-brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #bfdbfe;
+        }
+
+        /* Main container */
+
+        .student-dashboard {
+            max-width: 1150px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+        /* Welcome section */
+
+        .welcome-section {
+            padding: 35px;
+            border-radius: 18px;
+
+            background: rgba(255,255,255,0.90);
+
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+
+            margin-bottom: 30px;
+        }
+
+        .welcome-section h1 {
+            font-size: 34px;
+            color: #075985;
+            margin-top: 0;
+        }
+
+        .welcome-section p {
+            color: #475569;
+            font-size: 16px;
+        }
+
+        /* Statistics */
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-card {
+            background: rgba(255,255,255,0.95);
+
+            padding: 28px;
+            border-radius: 16px;
+
+            text-align: center;
+
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+
+            border-top: 5px solid #2563eb;
+
+            transition: 0.3s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .dashboard-card h2 {
+            font-size: 38px;
+            color: #2563eb;
+            margin: 0 0 10px;
+        }
+
+        .dashboard-card p {
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .pending-card {
+            border-top-color: #f59e0b;
+        }
+
+        .pending-card h2 {
+            color: #d97706;
+        }
+
+        .resolved-card {
+            border-top-color: #10b981;
+        }
+
+        .resolved-card h2 {
+            color: #059669;
+        }
+
+        /* Quick actions */
+
+        .dashboard-actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        .dashboard-btn {
+            display: inline-block;
+
+            padding: 13px 22px;
+
+            background: #2563eb;
+            color: #ffffff !important;
+
+            text-decoration: none !important;
+
+            border-radius: 9px;
+            font-weight: 600;
+
+            transition: 0.3s;
+        }
+
+        .dashboard-btn:hover {
+            background: #7891d6;
+            color: #ffffff !important;
+            transform: translateY(-2px);
+        }
+
+        .secondary-btn {
+            background: #232425;
+            color: #ffffff !important;
+        }
+
+        .secondary-btn:hover {
+            background: #6c6e6f;
+            color: #ffffff !important;
+        }
+
+        /* College Notices */
+
+        .notices-section {
+            background: rgba(255,255,255,0.96);
+
+            padding: 30px;
+            border-radius: 18px;
+
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+
+            margin-bottom: 30px;
+        }
+
+        .notices-section h2 {
+            color: #075985;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        .notice-item {
+            background: #eff6ff;
+
+            border-left: 5px solid #2563eb;
+
+            padding: 20px;
+            margin-bottom: 18px;
+
+            border-radius: 10px;
+        }
+
+        .notice-item h3 {
+            color: #1e40af;
+            margin-top: 0;
+        }
+
+        .notice-item p {
+            color: #334155;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        .notice-link {
+            display: inline-block;
+            margin-top: 10px;
+
+            color: #2563eb;
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+        .notice-link:hover {
+            text-decoration: underline;
+        }
+
+        .notice-empty {
+            text-align: center;
+            padding: 20px;
+
+            background: #f8fafc;
+            color: #64748b;
+
+            border-radius: 10px;
+        }
+
+        /* Recent Complaints */
+
+        .recent-section {
+            background: rgba(255,255,255,0.96);
+
+            padding: 30px;
+            border-radius: 18px;
+
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+
+            margin-bottom: 30px;
+        }
+
+        .recent-section h2 {
+            color: #075985;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        .recent-item {
+            background: #eff6ff;
+
+            padding: 18px;
+            margin-bottom: 15px;
+
+            border-radius: 10px;
+            border-left: 5px solid #2563eb;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .complaint-id {
+            color: #1e40af;
+            font-weight: bold;
+        }
+
+        .complaint-status {
+            padding: 6px 12px;
+
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .recent-empty {
+            text-align: center;
+            padding: 20px;
+
+            background: #f8fafc;
+            color: #64748b;
+
+            border-radius: 10px;
+        }
+
+        /* Mobile responsive */
+
+        @media (max-width: 768px) {
+
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-section h1 {
+                font-size: 27px;
+            }
+
+            .dashboard-navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .dashboard-actions {
+                flex-direction: column;
+            }
+
+            .dashboard-btn {
+                text-align: center;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav class="dashboard-navbar">
+
+        <div class="nav-brand">
+            🎓 CampusConnect
+        </div>
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('dashboard') }}">Home</a>
+
+            <a href="{{ url_for('notices') }}">Notices</a>
+
+            <a href="{{ url_for('submit_complaint') }}">
+                Submit Complaint
+            </a>
+
+            <a href="{{ url_for('complaints') }}">
+                My Complaints
+            </a>
+
+            <a href="{{ url_for('profile') }}">Profile</a>
+
+            <a href="{{ url_for('logout') }}">Logout</a>
+
+        </div>
+
+    </nav>
+
+    <main class="student-dashboard">
+
+        <!-- Welcome -->
+
+        <section class="welcome-section">
+            <div class="dashboard-profile">
+
+                {% if user and user["profile_photo"] %}
+                    <img src="{{ url_for('static', filename='uploads/profile_photos/' + user['profile_photo']) }}"
+                        alt="Profile Photo"
+                        class="dashboard-profile-photo"
+                        onclick="openPhoto(this.src)"
+                        style="cursor: pointer;">
+                {% else %}
+                    <div class="dashboard-profile-avatar">👨‍🎓</div>
+                {% endif %}
+
+            </div>
+
+            <h1>Hello, {{ session.get('name') }} 👋</h1>
+
+            <p>Welcome to your Student Dashboard.</p>
+
+            <p>
+                Manage your college complaints and stay updated
+                with important college announcements.
+            </p>
+
+        </section>
+
+        <!-- Complaint Statistics -->
+
+        <section class="dashboard-cards">
+
+            <div class="dashboard-card">
+
+                <h2>{{ total }}</h2>
+
+                <p>📋 Total Complaints</p>
+
+            </div>
+
+            <div class="dashboard-card pending-card">
+
+                <h2>{{ pending }}</h2>
+
+                <p>⏳ Pending Complaints</p>
+
+            </div>
+
+            <div class="dashboard-card resolved-card">
+
+                <h2>{{ resolved }}</h2>
+
+                <p>✅ Resolved Complaints</p>
+
+            </div>
+
+        </section>
+
+        <!-- Quick Actions -->
+
+        <section class="dashboard-actions">
+
+            <a href="{{ url_for('submit_complaint') }}"
+               class="dashboard-btn">
+
+                + Submit New Complaint
+
+            </a>
+
+            <a href="{{ url_for('my_complaints') }}"
+               class="dashboard-btn secondary-btn">
+                    📍 Track My Complaints
+            </a>
+
+            <a href="{{ url_for('profile') }}"
+               class="dashboard-btn secondary-btn">
+
+                View My Profile
+
+            </a>
+
+        </section>
+
+        <!-- College Notices -->
+
+        <section class="notices-section">
+
+            <h2>📢 College Notices</h2>
+
+            {% if notices %}
+
+                {% for notice in notices %}
+
+                    <div class="notice-item">
+
+                        <h3>{{ notice['title'] }}</h3>
+
+                        <p>{{ notice['message'] }}</p>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="notice-empty">
+
+                    📭 No college notices available right now.
+
+                </div>
+
+            {% endif %}
+
+            <a href="{{ url_for('notices') }}"
+               class="notice-link">
+
+                View All Notices →
+
+            </a>
+
+        </section>
+
+        <!-- Recent Complaints -->
+
+        <section class="recent-section">
+
+            <h2>📋 Recent Complaints</h2>
+
+            {% if recent_complaints %}
+
+                {% for complaint in recent_complaints %}
+
+                    <div class="recent-item">
+
+                        <div>
+
+                            <span class="complaint-id">
+
+                                Complaint #{{ complaint['id'] }}
+
+                            </span>
+
+                            <p>
+
+                                Status: {{ complaint['status'] }}
+
+                            </p>
+
+                        </div>
+
+                        <span class="complaint-status
+                        {% if complaint['status'] == 'Pending' %}
+                        status-pending
+                        {% elif complaint['status'] == 'Resolved' %}
+                        status-resolved
+                        {% elif complaint['status'] == 'Rejected' %}
+                        status-rejected
+                        {% endif %}">
+
+                            {{ complaint['status'] }}
+
+                        </span>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="recent-empty">
+
+                    📭 You have not submitted any complaints yet.
+
+                </div>
+
+            {% endif %}
+
+            <a href="{{ url_for('complaints') }}"
+               class="notice-link">
+
+                View All Complaints →
+
+            </a>
+
+        </section>
+
+    </main>
+<script>
+    function openPhoto(src) {
+        const newWindow = window.open("", "_blank");
+
+        if (newWindow) {
+            newWindow.document.write(`
+                <html>
+                <head>
+                    <title>Profile Photo</title>
+                </head>
+                <body style="margin:0; background:linear-gradient(135deg, #0f172a, #1e3a8a, #7c3aed); display:flex; justify-content:center; align-items:center; min-height:100vh;">
+                    <img src="${src}" style="max-width:95%; max-height:95vh; object-fit:contain;">
+                </body>
+                </html>
+            `);
+        }
+    }
+</script>
+
+</body>
+
+</html>
+```

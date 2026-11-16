@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Complaints | CampusConnect</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <h1>My Complaints</h1>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <!-- Search and Filter -->
+    <div class="filter-container">
+        <h2>Search & Filter</h2>
+
+        <form method="GET" action="{{ url_for('complaints') }}">
+            <input type="text" name="search"
+                   placeholder="Search complaint title..."
+                   value="{{ search }}">
+
+            <select name="status">
+                <option value="">All Status</option>
+                <option value="Pending"
+                    {% if selected_status == 'Pending' %}selected{% endif %}>
+                    Pending
+                </option>
+                <option value="In Progress"
+                    {% if selected_status == 'In Progress' %}selected{% endif %}>
+                    In Progress
+                </option>
+                <option value="Resolved"
+                    {% if selected_status == 'Resolved' %}selected{% endif %}>
+                    Resolved
+                </option>
+            </select>
+
+            <select name="priority">
+                <option value="">All Priorities</option>
+                <option value="Low"
+                    {% if selected_priority == 'Low' %}selected{% endif %}>
+                    Low
+                </option>
+                <option value="Medium"
+                    {% if selected_priority == 'Medium' %}selected{% endif %}>
+                    Medium
+                </option>
+                <option value="High"
+                    {% if selected_priority == 'High' %}selected{% endif %}>
+                    High
+                </option>
+            </select>
+
+            <button type="submit">Search</button>
+            <a href="{{ url_for('complaints') }}">Reset</a>
+        </form>
+    </div>
+
+    <!-- Complaints Table -->
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+
+        {% for complaint in complaints %}
+        <tr>
+            <td>{{ complaint.id }}</td>
+            <td>{{ complaint.title }}</td>
+            <td>{{ complaint.category }}</td>
+            <td>{{ complaint.priority }}</td>
+            <td>{{ complaint.status }}</td>
+            <td>{{ complaint.created_at }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6">No complaints found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Complaint Status Timeline -->
+    <h2>Complaint Status Timeline</h2>
+
+    {% for item in history %}
+        <div class="timeline-item">
+            <p>
+                Complaint #{{ item.complaint_id }}:
+                {{ item.old_status }} → {{ item.new_status }}
+            </p>
+            <small>{{ item.updated_at }}</small>
+        </div>
+    {% else %}
+        <p>No status updates available yet.</p>
+    {% endfor %}
+
+    <br>
+
+    <a class="btn" href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a class="btn" href="{{ url_for('submit_complaint') }}">
+        New Complaint
+    </a>
+
+</div>
+
+</body>
+</html>

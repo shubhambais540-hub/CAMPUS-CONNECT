@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Complaint | CampusConnect</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="form-container">
+
+        <h1>CampusConnect</h1>
+        <h2>Submit Complaint</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <p class="message">{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST" enctype="multipart/form-data">
+
+            <input
+                type="text"
+                name="title"
+                placeholder="Complaint Title"
+                required
+            >
+
+            <select name="category" required>
+                <option value="">Select Category</option>
+
+         <!-- Existing Categories -->
+                <option value="Classroom">Classroom</option>
+                <option value="Library">Library</option>
+                <option value="Computer Lab">Computer Lab</option>
+                <option value="Hostel">Hostel</option>
+                <option value="Infrastructure">Infrastructure</option>
+
+        <!-- New Categories -->
+                <option value="Water Facilities">Water Facilities</option>
+                <option value="Cleanliness">Cleanliness</option>
+                <option value="Electricity">Electricity</option>
+
+        <!-- Other -->
+                <option value="Other">Other</option>
+            </select>
+
+            <!-- New Priority Feature -->
+            <select name="priority" required>
+                <option value="">Select Priority</option>
+                <option value="Low">Low</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="High">High</option>
+            </select>
+
+            <textarea
+                name="description"
+                placeholder="Describe your complaint..."
+                required
+            ></textarea>
+            
+           <div class="photo-upload-box">
+
+                <label for="complaint_photo">
+                    📷 Upload Complaint Photo (Optional)
+                </label>
+
+                <input
+                    type="file"
+                    name="complaint_photo"
+                    id="complaint_photo"
+                    accept=".jpg,.jpeg,.png,.webp"
+                >
+
+                <p>Supported formats: JPG, JPEG, PNG, WEBP</p>
+
+                <img id="photoPreview"
+                    style="display:none; max-width:200px; margin-top:15px; border-radius:10px;"
+                    alt="Complaint Photo Preview">
+
+            </div>
+
+            <script>
+                document.getElementById("complaint_photo").addEventListener("change", function () {
+
+                    const file = this.files[0];
+                    const preview = document.getElementById("photoPreview");
+
+                    if (file) {
+                        preview.src = URL.createObjectURL(file);
+                        preview.style.display = "block";
+                    } else {
+                        preview.style.display = "none";
+                    }
+                });
+            </script>
+
+
+            <button type="submit">Submit Complaint</button>
+
+        </form>
+
+        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+
+    </div>
+</body>
+</html>
